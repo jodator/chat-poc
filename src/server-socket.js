@@ -67,6 +67,8 @@ sub.on( 'message', function( channel, message ) {
 } );
 
 io.on( 'connection', ( socket ) => {
+	console.log( 'Socket connected: ', socket.client.request.headers[ 'x-forwarded-for' ] );
+
 	socket.on( 'hello', () => {
 		pub.smembers( CHAT_ROOMS, ( dunno, chatRooms ) => {
 			socket.emit( 'hello', { chatRooms: chatRooms } );

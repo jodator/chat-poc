@@ -81,7 +81,7 @@ const activeChatRoomsView = new Marionette.CollectionView( {
 } );
 
 app.commands.setHandler( 'connect', function( user ) {
-	let socket = io( 'http://localhost:3001' );
+	let socket = io( 'ws://' + location.hostname + ':3001' );
 
 	socket.on( 'hello', function( data ) {
 		let chatRooms = [];
