@@ -28,6 +28,8 @@
 			margin: 1em 0;
 			padding-bottom: 1em;
 			padding-top: 1em;
+			height: 400px;
+			overflow-y: auto;
 		}
 	</style>
 </head>
@@ -39,8 +41,8 @@
 				<h1>Chats app</h1>
 			</div>
 			<div class="col-sm-6">
-				<div class="form-inline" style="padding-top: 1em;" id="user-id">
-				</div>
+				<form class="form-inline" style="padding-top: 1em;" id="user-id">
+				</form>
 			</div>
 		</div>
 
@@ -85,12 +87,14 @@
 <script id="template-current-chat" type="text/html">
 	<div class="chat-room container-fluid"></div>
 	<div class="row">
-		<div class="col-xs-10">
-			<input title="chat" type="text" class="form-control">
-		</div>
-		<div class="col-xs-2">
-			<button class="btn btn-primary">Send</button>
-		</div>
+		<form action="">
+			<div class="col-xs-10">
+				<input title="chat" type="text" class="form-control">
+			</div>
+			<div class="col-xs-2">
+				<button class="btn btn-primary">Send</button>
+			</div>
+		</form>
 	</div>
 </script>
 

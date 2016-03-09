@@ -18,20 +18,29 @@ const userView = new ( Marionette.ItemView.extend( {
 	template: '#template-user',
 	events: {
 		'click button': function() {
-			const username = this.$el.find( 'input' ).val().trim();
+			this.connect();
+		},
+		'submit form': function( evt ) {
+			evt.preventDefault();
+			evt.stopPropagation();
 
-			if ( !username ) {
-				alert( 'Set username!' );
-
-				return;
-			}
-
-			user.set( 'name', username );
-
-			app.commands.execute( 'connect', user );
-
-			this.disable();
+			this.connect();
 		}
+	},
+
+	connect: function() {
+		const username = this.$el.find( 'input' ).val().trim();
+
+		if ( !username ) {
+			alert( 'Set username!' );
+
+			return;
+		}
+
+		user.set( 'name', username );
+
+		this.disable();
+		app.commands.execute( 'connect', user );
 	},
 
 	disable: function() {
@@ -89,7 +98,7 @@ app.commands.setHandler( 'connect', function( user ) {
 		data.chatRooms.forEach( ( name ) => {
 			chatRooms.push( { name: name } );
 		} );
-
+		userView.disable();
 		app.trigger( 'connected', { user: user, chatRooms: chatRooms } );
 		console.log( 'Connected. ' + data.chatRooms.length + ' chats open.' );
 	} );
@@ -110,7 +119,9 @@ app.commands.setHandler( 'connect', function( user ) {
 			chatRoom.set( 'messages', new Backbone.Collection() );
 		}
 
-		chatRoom.get( 'messages' ).add( _.extend( data, {
+		let messages = chatRoom.get( 'messages' );
+
+		messages.push( _.extend( data, {
 			user: false,
 			time: formatTime( data.time ),
 			msg: 'User ' + data.user + ' joined!'
@@ -160,6 +171,10 @@ app.on( 'connected', function() {
 } );
 
 app.commands.setHandler( 'chat:active', function( chat ) {
+	if ( !chat.has( 'messages' ) ) {
+		chat.set( 'messages', new Backbone.Collection() );
+	}
+
 	let messages = chat.get( 'messages' );
 
 	let activeChatView = new ( Marionette.CompositeView.extend( {
@@ -170,24 +185,38 @@ app.commands.setHandler( 'chat:active', function( chat ) {
 			className: 'row'
 		} ),
 		events: {
-			'click button': function( evt ) {
-				let input = this.$el.find( 'input' );
-				let text = input.val().trim();
-				input.val( '' );
-				if ( text ) {
-					app.commands.execute( 'chat:msg', { chat: this.model, msg: text } );
-				}
+			'click button': function() {
+				this.submitChat();
+			},
+			'submit form': function( evt ) {
+				evt.preventDefault();
+				evt.stopPropagation();
+
+				this.submitChat();
 			}
 		},
 		initialize: function() {
 			var that = this;
-			this.listenTo( messages, 'add', function() {
-				that.render();
+			this.listenTo( this.collection, 'add', function() {
+				setTimeout( function() {
+					var scrollable = that.$el.find( '.chat-room' ).get( 0 );
+					scrollable.scrollTop = scrollable.scrollHeight;
+					that.$el.find( 'input' ).focus();
+				}, 10 );
 			} );
+		},
+		onRender: function() {
+			this._initialEvents();
+		},
+		submitChat: function() {
+			let input = this.$el.find( 'input' );
+			let text = input.val().trim();
+			input.val( '' );
+			if ( text ) {
+				app.commands.execute( 'chat:msg', { chat: this.model, msg: text } );
+			}
 		}
 	} ) )( { collection: messages, model: chat } );
-
-	activeChatView.render();
 
 	app.rootView.currentChat.show( activeChatView );
 } );
