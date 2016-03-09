@@ -5,7 +5,17 @@ const Hapi = require( 'hapi' );
 // Hapi server
 const server = new Hapi.Server();
 
-server.connection( { port: 3001, labels: [ 'chat' ] } );
+let port = 3001;
+
+if ( process.argv[ 2 ] ) {
+	let portParts = process.argv[ 2 ].split( '=' );
+
+	if ( portParts[ 0 ] === 'port' ) {
+		port = portParts[ 1 ]
+	}
+}
+
+server.connection( { port: port, labels: [ 'chat' ] } );
 
 // Socket IO
 const io = require( 'socket.io' )( server.select( 'chat' ).listener );
