@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Lolz chatz</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.1/backbone.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.4.4/backbone.marionette.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<style>
+		body {
+			background: #fefefe;
+		}
+
+		.chat-rooms {
+			max-height: 400px;
+
+			overflow-y: auto;
+		}
+
+		.chat-room {
+			border: 1px solid #ddd;
+			margin: 1em 0;
+			padding-bottom: 1em;
+			padding-top: 1em;
+		}
+	</style>
+</head>
+<body>
+<div id="app">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-6">
+				<h1>Chats app</h1>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-inline" style="padding-top: 1em;" id="user-id">
+				</div>
+			</div>
+		</div>
+
+		<div class="row" id="chats-views" style="display:none;">
+			<div class="col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">Chats rooms</div>
+					<div id="chats" class="panel-body"></div>
+				</div>
+			</div>
+			<div class="col-sm-8">
+				<div class="row">
+					<div class="col-sm-12" id="active-chat-rooms">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12" id="current-chat">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id="template-chat" type="text/html">
+	<%= name %>
+	<button class="btn btn-default btn-xs">Join!</button>
+</script>
+
+<script id="template-active-chat" type="text/html">
+	<a href="#"><%= name %></a>
+</script>
+
+<script id="template-user" type="text/html">
+	<label for="name">
+		Your name: <input id="name" type="text" class="form-control">
+	</label>
+	<button class="btn btn-sm">connect</button>
+</script>
+
+<script id="template-current-chat" type="text/html">
+	<div class="chat-room container-fluid"></div>
+	<div class="row">
+		<div class="col-xs-10">
+			<input title="chat" type="text" class="form-control">
+		</div>
+		<div class="col-xs-2">
+			<button class="btn btn-primary">Send</button>
+		</div>
+	</div>
+</script>
+
+<script id="template-chat-message" type="text/html">
+	<div class="col-xs-12">
+		<small><%= time %></small>
+		<% if( user ) { %><strong><%= user %>:</strong><% } %>
+		<span><%= msg %></span>
+	</div>
+</script>
+
+<script src="/js/chat.js"></script>
+
+</body>
+</html>
