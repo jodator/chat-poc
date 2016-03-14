@@ -22,8 +22,8 @@ const io = require( 'socket.io' )( server.select( 'chat' ).listener );
 
 // Redis Pub/Sub
 const redis = require( 'redis' );
-const pub = redis.createClient();
-const sub = redis.createClient();
+const pub = redis.createClient( { host: 'parent-host' } );
+const sub = redis.createClient( { host: 'parent-host' } );
 
 const CHAT_ROOMS = 'chatRooms';
 
