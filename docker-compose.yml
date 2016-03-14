@@ -1,0 +1,22 @@
+version: '2'
+services:
+  front:
+    build:
+      context: .
+      dockerfile: front/Dockerfile
+    ports:
+      - "3000:3000"
+  back:
+    build:
+      context: .
+      dockerfile: back/Dockerfile
+    ports:
+      - "3001:3001"
+    links:
+      - "redis:redis"
+    depends_on:
+      - redis
+  redis:
+    image: redis:latest
+    volumes:
+      - /data:/data

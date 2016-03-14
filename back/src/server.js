@@ -22,15 +22,17 @@ const io = require( 'socket.io' )( server.select( 'chat' ).listener );
 
 // Redis Pub/Sub
 const redis = require( 'redis' );
-const pub = redis.createClient( { host: 'parent-host' } );
-const sub = redis.createClient( { host: 'parent-host' } );
+
+// Connect to redis host (could be set as env variable also)
+const pub = redis.createClient( { host: 'redis' } );
+const sub = redis.createClient( { host: 'redis' } );
 
 const CHAT_ROOMS = 'chatRooms';
 
-//Create sample chat rooms
-//for ( let i = 1; i <= 10; i++ ) {
-//	pub.sadd( CHAT_ROOMS, 'Chat room ' + i );
-//}
+// Create sample chat rooms if they don't exist
+for ( let i = 1; i <= 10; i++ ) {
+	pub.sadd( CHAT_ROOMS, 'Chat room ' + i );
+}
 
 server.start( ( err )=> {
 	if ( err ) {
