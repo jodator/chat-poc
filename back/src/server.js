@@ -34,6 +34,7 @@ for ( let i = 1; i <= 10; i++ ) {
 	pub.sadd( CHAT_ROOMS, 'Chat room ' + i );
 }
 
+
 server.start( ( err )=> {
 	if ( err ) {
 		throw err;
