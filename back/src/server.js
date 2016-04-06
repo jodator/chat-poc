@@ -16,7 +16,6 @@ if ( process.argv[ 2 ] ) {
 }
 
 server.connection( { port: port, labels: [ 'chat' ] } );
-
 // Socket IO
 const io = require( 'socket.io' )( server.select( 'chat' ).listener );
 
