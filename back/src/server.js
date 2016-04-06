@@ -23,6 +23,7 @@ const io = require( 'socket.io' )( server.select( 'chat' ).listener );
 // Redis Pub/Sub
 const redis = require( 'redis' );
 
+
 // Connect to redis host (could be set as env variable also)
 const pub = redis.createClient( { host: 'redis' } );
 const sub = redis.createClient( { host: 'redis' } );
